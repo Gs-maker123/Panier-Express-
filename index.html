@@ -80,11 +80,20 @@
       <h2>📦 Mon inventaire</h2>
       <div id="articlesGrid" class="articles-grid"></div>
     </section>
+
+           <!-- Footer -->
+    <footer class="app-footer">
+      <p>© GSTK – <span id="currentYear"></span></p>
+    </footer>
+    
   </div>
 
   <!-- Bouton retour en haut -->
   <button id="scrollToTopBtn" class="scroll-to-top" title="Retour en haut">↑</button>
 
   <script src="app.js"></script>
+    <script>
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
+    </script>
 </body>
 </html>
