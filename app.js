@@ -253,7 +253,7 @@ function renderInventory() {
     });
     const modeBadge = document.createElement('span');
     modeBadge.className = 'mode-badge';
-    modeBadge.textContent = isBinary ? '⚖️ Mode binaire' : '🎯 Stock cible';
+    modeBadge.textContent = isBinary ? '⚖️ En stock' : '🎯 A Ajouter';
     headerDiv.appendChild(nameSpan);
     headerDiv.appendChild(editBtn);
     headerDiv.appendChild(modeBadge);
@@ -297,8 +297,8 @@ function renderInventory() {
     const modeSwitch = document.createElement('div');
     modeSwitch.className = 'mode-switch';
     modeSwitch.innerHTML = `
-      <label><input type="radio" name="mode-${article.id}" value="binary" ${isBinary ? 'checked' : ''}> Mode binaire</label>
-      <label><input type="radio" name="mode-${article.id}" value="target" ${!isBinary ? 'checked' : ''}> Stock souhaité</label>
+      <label><input type="radio" name="mode-${article.id}" value="binary" ${isBinary ? 'checked' : ''}> En Stock</label>
+      <label><input type="radio" name="mode-${article.id}" value="target" ${!isBinary ? 'checked' : ''}> A Ajouter</label>
     `;
 
     const dynamicZone = document.createElement('div');
