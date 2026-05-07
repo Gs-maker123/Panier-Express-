@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Panier Express+ · Courses & inventaire</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="manifest" href="data:application/manifest+json,{}">
   <meta name="theme-color" content="#0066cc">
 </head>
 <body>
@@ -13,24 +12,22 @@
     <header>
       <div class="header-row">
         <h1>🛒 Panier Express+</h1>
-        <button id="themeToggle" class="theme-btn" title="Mode nuit" aria-label="Changer de thème (nuit/jour)">🌙</button>
+        <button id="themeToggle" class="theme-btn" title="Mode nuit">🌙</button>
       </div>
       <p class="subtitle">Inventaire + liste de courses avec prix</p>
     </header>
 
-    <!-- === SECTION LISTE DE COURSES (déplacée en premier) === -->
+    <!-- Liste de courses -->
     <section class="shopping-section">
       <div class="shopping-header">
         <h2>🛍️ Liste de courses</h2>
         <button id="toggleShoppingBtn" class="btn-ghost">▼ Afficher</button>
       </div>
-
       <div class="budget-control">
         <label for="budgetInput">💰 Budget max :</label>
         <input type="number" id="budgetInput" step="0.01" placeholder="ex: 50" value="50">
         <span>€</span>
       </div>
-
       <div id="shoppingListContainer" class="shopping-list-container hidden">
         <div id="shoppingListContent" class="shopping-list"></div>
         <div class="shopping-actions">
@@ -41,9 +38,9 @@
       </div>
     </section>
 
-    <!-- === AJOUT RAPIDE D'ARTICLE === -->
+    <!-- Ajout rapide d'article -->
     <div class="add-article-panel">
-      <input type="text" id="newArticleName" placeholder="Nouvel article (ex. Farine)" autocomplete="off">
+      <input type="text" id="newArticleName" placeholder="Nouvel article" autocomplete="off">
       <select id="newArticleUnit">
         <option value="pcs">pièce(s)</option>
         <option value="kg">kg</option>
@@ -52,22 +49,20 @@
         <option value="roll">rouleau(x)</option>
         <option value="other">autre</option>
       </select>
-      <select id="newArticleCategory">
-        <!-- les catégories seront ajoutées par JS -->
-      </select>
+      <select id="newArticleCategory"></select>
       <button id="addArticleBtn" class="btn-primary">+ Ajouter</button>
     </div>
 
-    <!-- === FILTRE PAR CATÉGORIE === -->
+    <!-- Filtre par catégorie -->
     <div class="filter-section">
-      <label for="categoryFilter">🔍 Filtrer par catégorie :</label>
+      <label for="categoryFilter">🔍 Filtrer :</label>
       <select id="categoryFilter">
         <option value="all">Toutes les catégories</option>
       </select>
-      <button id="addCategoryBtn" class="btn-small" title="Ajouter une catégorie">+ Nouvelle catégorie</button>
+      <button id="addCategoryBtn" class="btn-small">+ Nouvelle catégorie</button>
     </div>
 
-    <!-- === ACTIONS GLOBALES (EXPORT, IMPORT, RESET) === -->
+    <!-- Actions globales -->
     <div class="actions-bar">
       <button id="exportBtn" class="btn-secondary">📁 Exporter</button>
       <button id="importBtn" class="btn-secondary">📂 Importer</button>
@@ -75,25 +70,33 @@
       <button id="resetDemoBtn" class="btn-outline">🔄 Exemple par défaut</button>
     </div>
 
-    <!-- === INVENTAIRE === -->
+    <!-- Inventaire -->
     <section class="inventory-section">
       <h2>📦 Mon inventaire</h2>
+
+      <!-- Barre d'actions horizontale (sticky) -->
+      <div class="action-toolbar">
+        <button id="toolbarCreate" class="toolbar-btn" title="Créer un article">➕</button>
+        <button id="toolbarModify" class="toolbar-btn" title="Modifier l'article sélectionné">✏️</button>
+        <button id="toolbarReorder" class="toolbar-btn" title="Réorganiser les articles">🔀</button>
+        <button id="toolbarDuplicate" class="toolbar-btn" title="Dupliquer l'article sélectionné">📋</button>
+        <button id="toolbarSave" class="toolbar-btn" title="Enregistrer (sauvegarde manuelle)">💾</button>
+      </div>
+
       <div id="articlesGrid" class="articles-grid"></div>
     </section>
 
-           <!-- Footer -->
+    <!-- Footer -->
     <footer class="app-footer">
       <p>© GSTK – <span id="currentYear"></span></p>
     </footer>
-    
   </div>
 
-  <!-- Bouton retour en haut -->
   <button id="scrollToTopBtn" class="scroll-to-top" title="Retour en haut">↑</button>
 
   <script src="app.js"></script>
-    <script>
+  <script>
     document.getElementById('currentYear').textContent = new Date().getFullYear();
-    </script>
+  </script>
 </body>
 </html>
