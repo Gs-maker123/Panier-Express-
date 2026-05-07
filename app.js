@@ -22,7 +22,10 @@ const defaultCategoriesList = [
 let articles = [];
 let categories = [...defaultCategoriesList];
 let currentFilter = "all";
-let currentBudget = 50; // valeur par défaut
+let currentBudget = 50;
+let selectedArticleId = null;
+let isReorderMode = false;
+let dragSourceId = null;
 
 // ---------- Gestion du budget ----------
 function loadBudget() {
@@ -40,7 +43,7 @@ function saveBudget() {
   localStorage.setItem(BUDGET_KEY, currentBudget.toString());
 }
 
-function updateBudgetDisplay() {
+function applyBudgetColorToTotal() {
   const totalElem = document.querySelector('.total-courses');
   if (!totalElem) return;
   const totalText = totalElem.textContent;
@@ -56,12 +59,7 @@ function updateBudgetDisplay() {
   }
 }
 
-// À appeler après chaque mise à jour du total
-function applyBudgetColorToTotal() {
-  updateBudgetDisplay();
-}
-
-// ---------- Gestion des catégories ----------
+// ---------- Gestion catégories ----------
 function loadCategories() {
   const stored = localStorage.getItem(CATEGORIES_KEY);
   if (stored) {
@@ -121,14 +119,14 @@ function addNewCategory() {
 
 // ---------- Modèle initial ----------
 const defaultArticles = [
-  { id: '1', name: 'Lait', unit: 'L', quantityOwned: 0.5, pricePerUnit: 1.20, mode: 'target', stockTarget: 1, hasStock: true, category: 'Produits laitiers' },
-  { id: '2', name: 'Pain', unit: 'pcs', quantityOwned: 0, pricePerUnit: 1.10, mode: 'binary', stockTarget: null, hasStock: false, category: 'Céréales' },
-  { id: '3', name: 'Œufs', unit: 'pcs', quantityOwned: 2, pricePerUnit: 0.25, mode: 'target', stockTarget: 6, hasStock: true, category: 'Produits laitiers' },
-  { id: '4', name: 'Beurre', unit: 'pcs', quantityOwned: 0, pricePerUnit: 2.10, mode: 'binary', stockTarget: null, hasStock: false, category: 'Produits laitiers' },
-  { id: '5', name: 'Café', unit: 'pack', quantityOwned: 1, pricePerUnit: 4.50, mode: 'target', stockTarget: 2, hasStock: true, category: 'Céréales' },
-  { id: '6', name: 'Lessive', unit: 'L', quantityOwned: 0.2, pricePerUnit: 6.90, mode: 'target', stockTarget: 1, hasStock: true, category: 'Produits d\'entretien' },
-  { id: '7', name: 'Papier toilette', unit: 'roll', quantityOwned: 1, pricePerUnit: 1.80, mode: 'target', stockTarget: 6, hasStock: true, category: 'Salle de bain' },
-  { id: '8', name: 'Pommes', unit: 'kg', quantityOwned: 0, pricePerUnit: 2.50, mode: 'binary', stockTarget: null, hasStock: false, category: 'Fruits frais' }
+  { id: '1', name: 'Lait', unit: 'L', quantityOwned: 0.5, pricePerUnit: 1.20, mode: 'target', stockTarget: 1, hasStock: true, category: 'Produits laitiers', order: 0 },
+  { id: '2', name: 'Pain', unit: 'pcs', quantityOwned: 0, pricePerUnit: 1.10, mode: 'binary', stockTarget: null, hasStock: false, category: 'Céréales', order: 1 },
+  { id: '3', name: 'Œufs', unit: 'pcs', quantityOwned: 2, pricePerUnit: 0.25, mode: 'target', stockTarget: 6, hasStock: true, category: 'Produits laitiers', order: 2 },
+  { id: '4', name: 'Beurre', unit: 'pcs', quantityOwned: 0, pricePerUnit: 2.10, mode: 'binary', stockTarget: null, hasStock: false, category: 'Produits laitiers', order: 3 },
+  { id: '5', name: 'Café', unit: 'pack', quantityOwned: 1, pricePerUnit: 4.50, mode: 'target', stockTarget: 2, hasStock: true, category: 'Céréales', order: 4 },
+  { id: '6', name: 'Lessive', unit: 'L', quantityOwned: 0.2, pricePerUnit: 6.90, mode: 'target', stockTarget: 1, hasStock: true, category: 'Produits d\'entretien', order: 5 },
+  { id: '7', name: 'Papier toilette', unit: 'roll', quantityOwned: 1, pricePerUnit: 1.80, mode: 'target', stockTarget: 6, hasStock: true, category: 'Salle de bain', order: 6 },
+  { id: '8', name: 'Pommes', unit: 'kg', quantityOwned: 0, pricePerUnit: 2.50, mode: 'binary', stockTarget: null, hasStock: false, category: 'Fruits frais', order: 7 }
 ];
 
 function saveToLocal() {
@@ -141,11 +139,14 @@ function loadArticles() {
     articles = JSON.parse(stored);
     articles = articles.map(a => {
       if (!a.category) a.category = "Autre";
+      if (a.order === undefined) a.order = 0;
       return a;
     });
   } else {
     articles = defaultArticles.map(a => ({ ...a }));
   }
+  // Trier par order
+  articles.sort((a, b) => (a.order || 0) - (b.order || 0));
   renderInventory();
   updateShoppingListDisplay();
 }
@@ -220,6 +221,81 @@ function editArticleName(articleId) {
   });
 }
 
+function selectArticle(articleId) {
+  document.querySelectorAll('.article-card').forEach(card => {
+    card.classList.remove('selected');
+  });
+  const selectedCard = document.querySelector(`.article-card[data-id="${articleId}"]`);
+  if (selectedCard) {
+    selectedCard.classList.add('selected');
+  }
+  selectedArticleId = articleId;
+}
+
+// Gestion du drag & drop pour réorganisation
+function handleDragStart(e, id) {
+  if (!isReorderMode) return;
+  dragSourceId = id;
+  e.target.closest('.article-card').classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/plain', id);
+}
+function handleDragEnd(e) {
+  e.target.closest('.article-card')?.classList.remove('dragging');
+  document.querySelectorAll('.article-card').forEach(card => {
+    card.classList.remove('drag-over');
+  });
+  dragSourceId = null;
+}
+function handleDragOver(e) {
+  if (!isReorderMode) return;
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  const targetCard = e.target.closest('.article-card');
+  if (targetCard && targetCard.dataset.id !== dragSourceId) {
+    targetCard.classList.add('drag-over');
+  }
+}
+function handleDragLeave(e) {
+  const targetCard = e.target.closest('.article-card');
+  if (targetCard) targetCard.classList.remove('drag-over');
+}
+function handleDrop(e, targetId) {
+  if (!isReorderMode) return;
+  e.preventDefault();
+  const targetCard = e.target.closest('.article-card');
+  targetCard?.classList.remove('drag-over');
+  if (dragSourceId && targetId && dragSourceId !== targetId) {
+    const sourceIndex = articles.findIndex(a => a.id === dragSourceId);
+    const targetIndex = articles.findIndex(a => a.id === targetId);
+    if (sourceIndex !== -1 && targetIndex !== -1) {
+      const [moved] = articles.splice(sourceIndex, 1);
+      articles.splice(targetIndex, 0, moved);
+      // Mettre à jour les orders
+      articles.forEach((a, idx) => a.order = idx);
+      saveAndRefresh();
+    }
+  }
+}
+
+function toggleReorderMode() {
+  isReorderMode = !isReorderMode;
+  const toolbar = document.querySelector('.action-toolbar');
+  if (isReorderMode) {
+    toolbar.classList.add('reorder-active');
+    document.querySelectorAll('.article-card').forEach(card => {
+      card.setAttribute('draggable', 'true');
+    });
+    alert("Mode réorganisation activé. Glissez-déposez les articles pour les réordonner. Cliquez à nouveau sur 🔀 pour désactiver.");
+  } else {
+    toolbar.classList.remove('reorder-active');
+    document.querySelectorAll('.article-card').forEach(card => {
+      card.setAttribute('draggable', 'false');
+      card.classList.remove('dragging', 'drag-over');
+    });
+  }
+}
+
 function renderInventory() {
   const grid = document.getElementById('articlesGrid');
   if (!grid) return;
@@ -234,10 +310,17 @@ function renderInventory() {
     const card = document.createElement('div');
     card.className = 'article-card';
     card.dataset.id = article.id;
+    card.setAttribute('draggable', isReorderMode ? 'true' : 'false');
+
+    // Gestion drag & drop
+    card.addEventListener('dragstart', (e) => handleDragStart(e, article.id));
+    card.addEventListener('dragend', handleDragEnd);
+    card.addEventListener('dragover', handleDragOver);
+    card.addEventListener('dragleave', handleDragLeave);
+    card.addEventListener('drop', (e) => handleDrop(e, article.id));
 
     const isBinary = article.mode === 'binary';
 
-    // Header
     const headerDiv = document.createElement('div');
     headerDiv.className = 'card-header';
     const nameSpan = document.createElement('span');
@@ -253,12 +336,11 @@ function renderInventory() {
     });
     const modeBadge = document.createElement('span');
     modeBadge.className = 'mode-badge';
-    modeBadge.textContent = isBinary ? '⚖️ En stock' : '🎯 A Ajouter';
+    modeBadge.textContent = isBinary ? '⚖️ Mode binaire' : '🎯 Stock cible';
     headerDiv.appendChild(nameSpan);
     headerDiv.appendChild(editBtn);
     headerDiv.appendChild(modeBadge);
 
-    // Champs
     const fieldsDiv = document.createElement('div');
     fieldsDiv.className = 'row-fields';
     fieldsDiv.innerHTML = `
@@ -283,7 +365,6 @@ function renderInventory() {
       </div>
     `;
 
-    // Sélecteur de catégorie
     const catDiv = document.createElement('div');
     catDiv.className = 'field';
     catDiv.innerHTML = `
@@ -297,8 +378,8 @@ function renderInventory() {
     const modeSwitch = document.createElement('div');
     modeSwitch.className = 'mode-switch';
     modeSwitch.innerHTML = `
-      <label><input type="radio" name="mode-${article.id}" value="binary" ${isBinary ? 'checked' : ''}> En Stock</label>
-      <label><input type="radio" name="mode-${article.id}" value="target" ${!isBinary ? 'checked' : ''}> A Ajouter</label>
+      <label><input type="radio" name="mode-${article.id}" value="binary" ${isBinary ? 'checked' : ''}> Mode binaire</label>
+      <label><input type="radio" name="mode-${article.id}" value="target" ${!isBinary ? 'checked' : ''}> Stock souhaité</label>
     `;
 
     const dynamicZone = document.createElement('div');
@@ -370,11 +451,18 @@ function renderInventory() {
         saveAndRefresh();
       });
     }
-    deleteBtn.addEventListener('click', () => {
+    deleteBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
       if (confirm('Supprimer cet article ?')) {
         articles = articles.filter(a => a.id !== article.id);
         saveAndRefresh();
       }
+    });
+
+    card.addEventListener('click', (e) => {
+      if (isReorderMode) return; // désactive sélection en mode réorganisation
+      if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.closest('.edit-name-btn')) return;
+      selectArticle(article.id);
     });
   });
 }
@@ -418,6 +506,54 @@ function escapeHtml(str) {
   });
 }
 
+// ---------- Actions de la toolbar ----------
+function createNewArticle() {
+  const nameInput = document.getElementById('newArticleName');
+  if (nameInput) {
+    nameInput.value = "Nouvel article";
+    nameInput.focus();
+  } else {
+    alert("Utilisez le champ d'ajout ci-dessus");
+  }
+}
+
+function modifySelectedArticle() {
+  if (!selectedArticleId) {
+    alert("Aucun article sélectionné. Cliquez sur un article d'abord.");
+    return;
+  }
+  editArticleName(selectedArticleId);
+}
+
+function duplicateSelectedArticle() {
+  if (!selectedArticleId) {
+    alert("Aucun article sélectionné.");
+    return;
+  }
+  const original = articles.find(a => a.id === selectedArticleId);
+  if (original) {
+    const newOrder = Math.max(...articles.map(a => a.order || 0)) + 1;
+    const newArticle = {
+      ...original,
+      id: generateId(),
+      name: original.name + " (copie)",
+      quantityOwned: 0,
+      hasStock: false,
+      stockTarget: original.stockTarget,
+      order: newOrder
+    };
+    articles.push(newArticle);
+    saveAndRefresh();
+    alert("Article dupliqué !");
+  }
+}
+
+function saveManually() {
+  saveToLocal();
+  alert("Données sauvegardées manuellement.");
+}
+
+// ---------- Autres actions ----------
 function addNewArticle() {
   const nameInput = document.getElementById('newArticleName');
   const unitSelect = document.getElementById('newArticleUnit');
@@ -427,6 +563,7 @@ function addNewArticle() {
     alert("Veuillez entrer un nom d'article");
     return;
   }
+  const newOrder = articles.length;
   const newArticle = {
     id: generateId(),
     name: name,
@@ -436,7 +573,8 @@ function addNewArticle() {
     mode: 'binary',
     stockTarget: null,
     hasStock: false,
-    category: catSelect.value
+    category: catSelect.value,
+    order: newOrder
   };
   articles.push(newArticle);
   saveAndRefresh();
@@ -472,6 +610,9 @@ function importData(file) {
         renderCategoryFilter();
         renderCategoryOptions();
       }
+      // Assurer order
+      articles.forEach((a, idx) => { if (a.order === undefined) a.order = idx; });
+      articles.sort((a,b) => (a.order||0) - (b.order||0));
       saveAndRefresh();
       alert('Import réussi !');
     } catch (err) {
@@ -518,7 +659,7 @@ function printList() {
   w.print();
 }
 
-// Mode nuit
+// ---------- Mode nuit ----------
 function initTheme() {
   const saved = localStorage.getItem(THEME_KEY);
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -536,6 +677,23 @@ function toggleTheme() {
   updateThemeIcon(isNight);
 }
 
+// ---------- Scroll to top ----------
+function initScrollToTop() {
+  const scrollBtn = document.getElementById('scrollToTopBtn');
+  if (!scrollBtn) return;
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 300) {
+      scrollBtn.classList.add('show');
+    } else {
+      scrollBtn.classList.remove('show');
+    }
+  });
+  scrollBtn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}
+
+// ---------- Filtre ----------
 function setupFilterListener() {
   const filterSelect = document.getElementById('categoryFilter');
   if (filterSelect) {
@@ -559,6 +717,7 @@ function setupBudgetListener() {
   }
 }
 
+// ---------- Event listeners ----------
 function setupEventListeners() {
   document.getElementById('addArticleBtn')?.addEventListener('click', addNewArticle);
   document.getElementById('exportBtn')?.addEventListener('click', exportData);
@@ -581,31 +740,19 @@ function setupEventListeners() {
   });
   document.getElementById('themeToggle')?.addEventListener('click', toggleTheme);
   document.getElementById('addCategoryBtn')?.addEventListener('click', addNewCategory);
+  
+  // Toolbar actions
+  document.getElementById('toolbarCreate')?.addEventListener('click', createNewArticle);
+  document.getElementById('toolbarModify')?.addEventListener('click', modifySelectedArticle);
+  document.getElementById('toolbarDuplicate')?.addEventListener('click', duplicateSelectedArticle);
+  document.getElementById('toolbarReorder')?.addEventListener('click', toggleReorderMode);
+  document.getElementById('toolbarSave')?.addEventListener('click', saveManually);
+  
   setupFilterListener();
   setupBudgetListener();
 }
 
-// ---------- Bouton retour en haut ----------
-function initScrollToTop() {
-  const scrollBtn = document.getElementById('scrollToTopBtn');
-  if (!scrollBtn) return;
-
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 300) {
-      scrollBtn.classList.add('show');
-    } else {
-      scrollBtn.classList.remove('show');
-    }
-  });
-
-  scrollBtn.addEventListener('click', () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
-  });
-}
-
+// ---------- Initialisation ----------
 document.addEventListener('DOMContentLoaded', () => {
   initTheme();
   loadBudget();
