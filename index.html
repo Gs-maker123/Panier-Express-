@@ -3,19 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAAB3klEQVR4nO2WO0sDQRhFHyCCjYWNiIW9hdhYWAgWFoKNFhZiY2FlY2NpoUjARhAEwUJBEBSLBAVBQRAEQQhYCCKIFQhYieCDjIu7ySZmMzuuPXCZzWT3fjs7O7tLEARBEARBEARBEARBEARBEARBEARBEARBEP91CNO/h3BC3QOwDQANzMcBbj2JfMwDmG3pBwAAHVFeR2lPixgHuI4SqxWupVAlPM4AdKM0WUPvFjEZ5SUfgB2UdqpeIBPhTpSXAyXQxYhUyUT4p/5LlAxPieZMcYFpLkCJLqJUA3BJlFdKAMcxCWDEGtP5GKaqETpMpHUC4E2Ul0sAClGSBdBhIq0M2Gkhu/cgPUSpFgD1u8HpIUpVATyJ8lIRgMQ1IIkwklB0GElFAF9E+QIAF1E6VgVw2f4sp5yRk4VJ0P4sdyLKswG8iPJlAGdR3qZ+FN+n/iz3IcrbJQCeRHkbwKMob+RF3tkoLwNwG+VtAO6ivJEXeWdEeQGAQZTXRHk6yJMoLwGgM8obR9WQp6K8BIDBKC8B4DjKSwA4DnDdCnkqyksB6IzysoC8T4sQ/X+i+bD4McoLABhEeQGA8SgvC+Q5bBFEFvJsqP8XAAAAAADApw9WPRbREkYNqQAAAABJRU5ErkJggg==">
+  <link rel="manifest" href="manifest.json">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Panier Express+ · Courses & inventaire</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="BudgetFlow">
   <meta name="theme-color" content="#0066cc">
+  <title>BudgetFlow · Gestion courses & inventaire</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="app-container">
     <header>
       <div class="header-row">
-        <h1>🛒 Panier Express+</h1>
+        <h1>💰 BudgetFlow</h1>
         <button id="themeToggle" class="theme-btn" title="Mode nuit">🌙</button>
       </div>
-      <p class="subtitle">Inventaire + liste de courses avec prix</p>
+      <p class="subtitle">Gérez votre inventaire et vos courses avec budget</p>
     </header>
 
     <!-- Liste de courses -->
@@ -79,8 +83,8 @@
       <div class="action-toolbar">
         <button id="toolbarCreate" class="toolbar-btn" title="Créer un article">➕</button>
         <button id="toolbarModify" class="toolbar-btn" title="Modifier l'article sélectionné">✏️</button>
-        <button id="toolbarReorder" class="toolbar-btn" title="Réorganiser les articles">🔀</button>
         <button id="toolbarDuplicate" class="toolbar-btn" title="Dupliquer l'article sélectionné">📋</button>
+        <button id="toolbarReorder" class="toolbar-btn" title="Réorganiser les articles">🔀</button>
         <button id="toolbarSave" class="toolbar-btn" title="Enregistrer (sauvegarde manuelle)">💾</button>
       </div>
 
@@ -89,7 +93,7 @@
 
     <!-- Footer -->
     <footer class="app-footer">
-      <p>PanierExpress+ by GSTK • © GSTK – <span id="currentYear"></span> • Tous droits réservés</p>
+      <p>BudgetFlow by GSTK • © GSTK – <span id="currentYear"></span> • Tous droits réservés</p>
     </footer>
   </div>
 
@@ -98,6 +102,13 @@
   <script src="app.js"></script>
   <script>
     document.getElementById('currentYear').textContent = new Date().getFullYear();
+    
+    // Enregistrement du Service Worker pour PWA
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js')
+        .then(reg => console.log('✅ Service Worker enregistré', reg))
+        .catch(err => console.error('❌ Erreur Service Worker', err));
+    }
   </script>
 </body>
 </html>
