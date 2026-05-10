@@ -599,3 +599,16 @@ body.dark .action-toolbar {
 .reorder-active .article-card:active {
   cursor: grabbing;
 }
+
+/* Styles pour PWA sur iOS */
+body {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Cache la barre d'adresse sur mobile en mode standalone */
+@media all and (display-mode: standalone) {
+  body {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
