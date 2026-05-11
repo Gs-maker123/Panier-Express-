@@ -1,6 +1,6 @@
-# 💰 BudgetFlow
+# 💰 PanierExpress
 
-**BudgetFlow** est une application web progressive (PWA) de gestion d’inventaire et de courses avec suivi de budget.  
+**PanierExpress** est une application web progressive (PWA) de gestion d’inventaire et de courses avec suivi de budget.  
 Elle permet de gérer facilement vos articles, leurs prix, quantités, catégories, et génère automatiquement une liste de courses basée sur votre stock.
 
 ---
@@ -72,14 +72,3 @@ Elle permet de gérer facilement vos articles, leurs prix, quantités, catégori
 | `app.js` | Logique métier (Vanilla JS, aucune dépendance) |
 | `manifest.json` | Configuration PWA (icônes, thème, orientation) |
 | `sw.js` | Service Worker pour le hors ligne |
-
----
-
-## 🚀 Installation et utilisation
-
-### En local
-
-1. Téléchargez ou clonez le dépôt :
-```bash
-git clone https://github.com/GSTK/budgetflow.git
-cd budgetflow
