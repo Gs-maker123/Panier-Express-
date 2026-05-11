@@ -1,36 +1,85 @@
-# 🛒 Panier Express+
+# 💰 BudgetFlow
 
-Application web légère pour gérer son inventaire ménager et sa liste de courses avec suivi des prix et budget.
+**BudgetFlow** est une application web progressive (PWA) de gestion d’inventaire et de courses avec suivi de budget.  
+Elle permet de gérer facilement vos articles, leurs prix, quantités, catégories, et génère automatiquement une liste de courses basée sur votre stock.
+
+---
 
 ## ✨ Fonctionnalités
 
-- 📦 **Inventaire** : ajoutez, modifiez, supprimez des articles
-- 🏷️ **Catégories** : filtrez par catégorie (personnalisables)
-- 💰 **Prix unitaire** : saisissez le prix de chaque article
-- 🎯 **Mode binaire** ou **Stock souhaité** : choisissez la logique d’achat
-- 🛍️ **Liste de courses automatique** : calcule les quantités manquantes
-- 💶 **Budget** : définissez un budget, le total passe en vert/rouge
-- 🌙 **Mode nuit** / Mode clair
-- 📱 **Responsive** : mobile, tablette, desktop
-- 💾 **Sauvegarde locale** : vos données restent dans le navigateur
-- 📤 **Export/Import** JSON pour sauvegarder ou transférer vos données
+### 📦 Gestion d’inventaire
+- Ajout, modification, suppression d’articles
+- Quantité possédée, unité (pièces, kg, L, paquets, etc.)
+- Prix unitaire (€)
+- **Mode binaire** (j’ai / j’ai plus) ou **Stock cible** (quantité souhaitée)
 
-## 🚀 Utilisation
+### 🛍️ Liste de courses automatique
+- Calcul automatique des quantités manquantes
+- Total estimé avec couleurs (vert ≤ budget / rouge > budget)
 
-1. Téléchargez ou clonez ce dépôt.
-2. Ouvrez `index.html` dans un navigateur moderne.
-3. Aucune installation ni serveur requis.
+### 💰 Budget
+- Définition d’un budget maximum
+- Affichage coloré du total (vert/rouge)
 
-## 📁 Fichiers
+### 🏷️ Catégories
+- 11 catégories prédéfinies (produits laitiers, entretien, viandes, surgelés, conserves, céréales, légumes frais, féculents, fruits frais, charcuterie, salle de bain)
+- Ajout de catégories personnalisées
+- Filtrage par catégorie
 
-- `index.html` – structure HTML
-- `style.css` – styles responsive et mode nuit
-- `app.js` – logique métier (vanilla JS)
+### 🔧 Barre d’actions (sticky)
+- ➕ Créer un article (focus sur le champ)
+- ✏️ Modifier le nom de l’article sélectionné
+- 📋 Dupliquer l’article sélectionné
+- 🔀 Réorganiser les articles (glisser-déposer)
+- 💾 Sauvegarde manuelle
 
-## 🛠️ Personnalisation
+### 🌙 Mode nuit / clair
+- Basculement automatique selon préférence système
+- Bouton manuel 🌙/☀️
 
-Modifiez directement `app.js` pour changer les catégories par défaut, le budget initial, etc.
+### 📱 Responsive
+- Adapté aux mobiles, tablettes et desktop
 
-## 📄 Licence
+### 💾 Stockage local
+- Toutes les données restent dans votre navigateur
+- Export/Import JSON (sauvegarde et transfert)
 
-MIT – libre d’utilisation et de modification.
+### 🚀 Progressive Web App (PWA)
+- Installation sur mobile/desktop
+- Fonctionne hors ligne
+- Icône native avec emoji 🛒
+- Écran de démarrage personnalisé
+
+### 🧭 Navigation
+- Bouton retour en haut (apparaît après défilement)
+
+---
+
+## 📸 Aperçu
+
+| Mode clair | Mode nuit |
+|------------|-----------|
+| Interface bleu océan | Interface bleu nuit profond |
+
+---
+
+## 🛠️ Technologies
+
+| Fichier | Rôle |
+|---------|------|
+| `index.html` | Structure, favicon emoji, balises PWA |
+| `style.css` | Styles responsive, mode nuit, animations |
+| `app.js` | Logique métier (Vanilla JS, aucune dépendance) |
+| `manifest.json` | Configuration PWA (icônes, thème, orientation) |
+| `sw.js` | Service Worker pour le hors ligne |
+
+---
+
+## 🚀 Installation et utilisation
+
+### En local
+
+1. Téléchargez ou clonez le dépôt :
+```bash
+git clone https://github.com/GSTK/budgetflow.git
+cd budgetflow
