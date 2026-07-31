@@ -2,50 +2,86 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='50' y='50' font-size='80' text-anchor='middle' dominant-baseline='central'%3E%F0%9F%92%B0%3C/text%3E%3C/svg%3E">
+  
+  <!-- Favicon SVG avec emoji 🛒 -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='50' y='50' font-size='80' text-anchor='middle' dominant-baseline='central'%3E%F0%9F%9B%92%3C/text%3E%3C/svg%3E">
+  
+  <!-- Fallback PNG -->
+  <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAAB3klEQVR4nO2WO0sDQRhFHyCCjYWNiIW9hdhYWAgWFoKNFhZiY2FlY2NpoUjARhAEwUJBEBSLBAVBQRAEQQhYCCKIFQhYieCDjIu7ySZmMzuuPXCZzWT3fjs7O7tLEARBEARBEARBEARBEARBEARBEARBEARBEP91CNO/h3BC3QOwDQANzMcBbj2JfMwDmG3pBwAAHVFeR2lPixgHuI4SqxWupVAlPM4AdKM0WUPvFjEZ5SUfgB2UdqpeIBPhTpSXAyXQxYhUyUT4p/5LlAxPieZMcYFpLkCJLqJUA3BJlFdKAMcxCWDEGtP5GKaqETpMpHUC4E2Ul0sAClGSBdBhIq0M2Gkhu/cgPUSpFgD1u8HpIUpVATyJ8lIRgMQ1IIkwklB0GElFAF9E+QIAF1E6VgVw2f4sp5yRk4VJ0P4sdyLKswG8iPJlAGdR3qZ+FN+n/iz3IcrbJQCeRHkbwKMob+RF3tkoLwNwG+VtAO6ivJEXeWdEeQGAQZTXRHk6yJMoLwGgM8obR9WQp6K8BIDBKC8B4DjKSwA4DnDdCnkqyksB6IzysoC8T4sQ/X+i+bD4McoLABhEeQGA8SgvC+Q5bBFEFvJsqP8XAAAAAADApw9WPRbREkYNqQAAAABJRU5ErkJggg==">
+  
+  <!-- Manifest PWA -->
   <link rel="manifest" href="manifest.json">
+  
+  <!-- Métadonnées -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#4A6CF7">
+  <meta name="description" content="Panier Express - Gérez votre inventaire et vos courses avec budget">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="BudgetFlow">
-  <meta name="theme-color" content="#0066cc">
-  <title>PanierExpress+ · Gestion courses & inventaire</title>
+  <meta name="apple-mobile-web-app-title" content="Panier Express">
+  
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Panier Express - Gestion courses & inventaire">
+  <meta property="og:description" content="Gérez votre inventaire et vos courses simplement.">
+  <meta property="og:image" content="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAoAAAAKACAMAAABoVcEWAAAB0lEQVR4nO3ZsY6DMAwG4DiG7v/+N++EKlSaGmJqDMThn6K2hUpCZQoE8H8+/u8PAAAAAADAbwR/S09g27bPx/cFcB2wANgA3F4AFwALgA3A7QVwAbAA2ADcXgAXAAuADcDtBXABsADYANxeABcAC4ANwO0FcAGwANgA3F4AFwALgA3A7QVwAbAA2ADcXgAXAAuADcDtBXABsADYANxeABcAC4ANwO0FcAGwANgA3F4AFwALgA3A7QVwAbAA2ADcXgAXAAuADcDtBXABsADYANxeABcAC4ANwO0FcAGwANgA3F4AFwALgA3A7QVwAbAA2ADcXgAXAAuADcDtBXABsADYANxeABcAC4ANwO0FcAGwANgA3F4AFwALgA3A7QVwAbAA2ADcXgAXAAuADcDtBXABsADYANxeABcAC4ANwO0FcAGwANgA3F4AFwALgA3A7QVwAbAA2ADcXgAXAAuADcDtBXABsADYANxeABcAC4ANwO0FcAGwANgA3F4AFwALgA3A7QVwAbAA2ADcXgAXAAuADcDtBXABsADYANxeABcAC4ANwO0FcAGwANgA3F4AFwALgA3A7QVwAbAA2ADcXgAXAAuADcDtBXAb29w/+HoBvP4DQP7+BwAAAAAAP+AnAAAA///fNke8quGdPgAAAABJRU5ErkJggg==">
+  
+  <title>🛒 Panier Express</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="app-container">
     <header>
       <div class="header-row">
-        <h1>💰 PanierExpress+</h1>
+        <h1>🛒 Panier Express</h1>
         <button id="themeToggle" class="theme-btn" title="Mode nuit">🌙</button>
       </div>
-      <p class="subtitle">Gérez votre inventaire et vos courses avec budget</p>
+      <p class="subtitle">Gérez votre inventaire et vos courses en un clin d'œil</p>
     </header>
 
-    <!-- Liste de courses -->
+    <!-- === LISTE DE COURSES === -->
     <section class="shopping-section">
       <div class="shopping-header">
-        <h2>🛍️ Liste de courses</h2>
+        <h2>🛍️ Liste de courses <span id="shoppingCount" class="badge-count">0</span></h2>
         <button id="toggleShoppingBtn" class="btn-ghost">▼ Afficher</button>
       </div>
+      
       <div class="budget-control">
-        <label for="budgetInput">💰 Budget max :</label>
-        <input type="number" id="budgetInput" step="0.01" placeholder="ex: 50" value="50">
-        <span>€</span>
+        <div class="budget-row">
+          <label for="budgetInput">💰 Budget max :</label>
+          <input type="number" id="budgetInput" step="0.01" placeholder="ex: 50" value="50">
+          <span>€</span>
+        </div>
+        <div class="budget-progress">
+          <div id="budgetBar" class="budget-bar" style="width:0%"></div>
+        </div>
+        <div id="budgetAlert" class="budget-alert hidden">⚠️ Vous avez dépassé 80% de votre budget !</div>
       </div>
+
+      <!-- STICKYBAR LISTE DE COURSES avec les boutons d'inventaire -->
+      <div class="action-toolbar shopping-toolbar">
+        <button id="shoppingCreate" class="toolbar-btn" title="Créer un article">➕</button>
+        <button id="shoppingModify" class="toolbar-btn" title="Modifier l'article sélectionné">✏️</button>
+        <button id="shoppingDuplicate" class="toolbar-btn" title="Dupliquer l'article sélectionné">📋</button>
+        <button id="shoppingReorder" class="toolbar-btn" title="Réorganiser (glisser-déposer)">🔀</button>
+        <button id="shoppingSave" class="toolbar-btn" title="Sauvegarder manuellement">💾</button>
+        <div class="toolbar-divider"></div>
+        <button id="shoppingValidate" class="toolbar-btn success" title="Valider les achats">✅</button>
+        <button id="shoppingShare" class="toolbar-btn" title="Partager la liste">📤</button>
+        <button id="shoppingCopy" class="toolbar-btn" title="Copier la liste">📋</button>
+        <button id="shoppingPrint" class="toolbar-btn" title="Imprimer / PDF">🖨️</button>
+        <button id="shoppingClear" class="toolbar-btn danger" title="Vider la liste">🗑️</button>
+      </div>
+
       <div id="shoppingListContainer" class="shopping-list-container hidden">
         <div id="shoppingListContent" class="shopping-list"></div>
-        <div class="shopping-actions">
-          <button id="shareListBtn" class="btn-secondary">📤 Partager</button>
-          <button id="copyListBtn" class="btn-secondary">📋 Copier</button>
-          <button id="printListBtn" class="btn-secondary">🖨️ Imprimer / PDF</button>
-        </div>
       </div>
     </section>
 
-    <!-- Ajout rapide d'article -->
+    <!-- === AJOUT RAPIDE === -->
     <div class="add-article-panel">
-      <input type="text" id="newArticleName" placeholder="Nouvel article" autocomplete="off">
+      <input type="text" id="newArticleName" placeholder="Nom de l'article" autocomplete="off">
+      <input type="number" id="newArticleQty" step="0.1" placeholder="Qté" value="1" min="0">
       <select id="newArticleUnit">
         <option value="pcs">pièce(s)</option>
         <option value="kg">kg</option>
@@ -55,10 +91,12 @@
         <option value="other">autre</option>
       </select>
       <select id="newArticleCategory"></select>
+      <input type="number" id="newArticlePrice" step="0.01" placeholder="Prix unitaire" value="0.00" min="0">
+      <span class="total-preview" id="newArticleTotal">Total : 0.00 €</span>
       <button id="addArticleBtn" class="btn-primary">+ Ajouter</button>
     </div>
 
-    <!-- Filtre par catégorie -->
+    <!-- === FILTRE === -->
     <div class="filter-section">
       <label for="categoryFilter">🔍 Filtrer :</label>
       <select id="categoryFilter">
@@ -67,7 +105,7 @@
       <button id="addCategoryBtn" class="btn-small">+ Nouvelle catégorie</button>
     </div>
 
-    <!-- Actions globales -->
+    <!-- === ACTIONS GLOBALES === -->
     <div class="actions-bar">
       <button id="exportBtn" class="btn-secondary">📁 Exporter</button>
       <button id="importBtn" class="btn-secondary">📂 Importer</button>
@@ -75,25 +113,25 @@
       <button id="resetDemoBtn" class="btn-outline">🔄 Exemple par défaut</button>
     </div>
 
-    <!-- Inventaire -->
+    <!-- === INVENTAIRE === -->
     <section class="inventory-section">
-      <h2>📦 Mon inventaire</h2>
+      <h2>📦 Mon inventaire <span id="inventoryCount" class="badge-count">0</span></h2>
 
-      <!-- Barre d'actions horizontale (sticky) -->
-      <div class="action-toolbar">
+      <!-- STICKYBAR INVENTAIRE -->
+      <div class="action-toolbar inventory-toolbar">
         <button id="toolbarCreate" class="toolbar-btn" title="Créer un article">➕</button>
         <button id="toolbarModify" class="toolbar-btn" title="Modifier l'article sélectionné">✏️</button>
         <button id="toolbarDuplicate" class="toolbar-btn" title="Dupliquer l'article sélectionné">📋</button>
-        <button id="toolbarReorder" class="toolbar-btn" title="Réorganiser les articles">🔀</button>
-        <button id="toolbarSave" class="toolbar-btn" title="Enregistrer (sauvegarde manuelle)">💾</button>
+        <button id="toolbarReorder" class="toolbar-btn" title="Réorganiser (glisser-déposer)">🔀</button>
+        <button id="toolbarSave" class="toolbar-btn" title="Sauvegarder manuellement">💾</button>
       </div>
 
-      <div id="articlesGrid" class="articles-grid"></div>
+      <div id="articlesGrid" class="inventory-list"></div>
     </section>
 
     <!-- Footer -->
     <footer class="app-footer">
-      <p>PanierExpress+ by GSTK • © GSTK – <span id="currentYear"></span> • Tous droits réservés</p>
+      <p>Panier Express by GSTK • © GSTK – <span id="currentYear"></span> • Tous droits réservés</p>
     </footer>
   </div>
 
@@ -103,7 +141,6 @@
   <script>
     document.getElementById('currentYear').textContent = new Date().getFullYear();
     
-    // Enregistrement du Service Worker pour PWA
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./sw.js')
         .then(reg => console.log('✅ Service Worker enregistré', reg))
