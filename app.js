@@ -281,8 +281,8 @@ function createArticleItem(article) {
   details.className = 'details';
   details.innerHTML = `
     <div class="mode-switch">
-      <label><input type="radio" name="mode-${article.id}" value="binary" ${isBinary ? 'checked' : ''}> En stock</label>
-      <label><input type="radio" name="mode-${article.id}" value="target" ${!isBinary ? 'checked' : ''}> Stock Max</label>
+      <label><input type="radio" name="mode-${article.id}" value="binary" ${isBinary ? 'checked' : ''}> Mode binaire</label>
+      <label><input type="radio" name="mode-${article.id}" value="target" ${!isBinary ? 'checked' : ''}> Stock cible</label>
     </div>
     <div class="stock-target-area">
       <span>📌 Stock souhaité :</span>
@@ -652,9 +652,11 @@ function toggleReorderMode() {
   });
   if (isReorderMode) {
     document.querySelector('.inventory-toolbar')?.classList.add('reorder-active');
+    document.querySelector('.shopping-toolbar')?.classList.add('reorder-active');
     alert("🔀 Mode réorganisation activé. Glissez-déposez pour réordonner.");
   } else {
     document.querySelector('.inventory-toolbar')?.classList.remove('reorder-active');
+    document.querySelector('.shopping-toolbar')?.classList.remove('reorder-active');
     document.querySelectorAll('.article-item').forEach(el => {
       el.classList.remove('dragging', 'drag-over');
     });
@@ -662,7 +664,7 @@ function toggleReorderMode() {
   }
 }
 
-// ---------- ACTIONS STICKYBAR INVENTAIRE ----------
+// ---------- ACTIONS STICKYBAR ----------
 function createNewArticle() {
   const input = document.getElementById('newArticleName');
   if (input) { input.value = "Nouvel article"; input.focus(); }
@@ -849,7 +851,7 @@ function setupEventListeners() {
   document.getElementById('shoppingCopy')?.addEventListener('click', copyList);
   document.getElementById('shoppingPrint')?.addEventListener('click', printList);
   document.getElementById('shoppingClear')?.addEventListener('click', clearShoppingList);
-
+  
   // ---------- STICKYBAR INVENTAIRE ----------
   document.getElementById('toolbarCreate')?.addEventListener('click', createNewArticle);
   document.getElementById('toolbarModify')?.addEventListener('click', modifySelectedArticle);
